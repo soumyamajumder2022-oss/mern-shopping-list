@@ -1,10 +1,10 @@
 services:
   # Backend API Service
   - type: web
-    name: mern-shopping-list-api
+    name: mern-shopping-list
     env: node
     plan: free
-    buildCommand: npm run render-build
+    buildCommand: npm install && cd client && npm install && cd .. && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
