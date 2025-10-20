@@ -1,0 +1,36 @@
+{
+  "name": "mern-shopping-list",
+  "version": "1.0.0",
+  "description": "Shopping list built with the MERN stack",
+  "license": "MIT",
+  "author": "Soumya",
+  "scripts": {
+    "dev": "concurrently \"npm:server\" \"npm:client\"",
+    "server": "npm run --prefix server server",
+    "client": "npm start --prefix client",
+    "install-client": "cd client && npm install",
+    "install-server": "cd server && npm install",
+    "install-all": "npm run install-server && npm run install-client",
+    "build": "npm run install-client && cd client && npm run build",
+    "start": "node server/server.js",
+    "render-build": "npm ci && npm run install-all && npm run build",
+    "render-start": "node server/server.js"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "axios": "^1.12.2",
+    "bootstrap": "^5.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^9.2.0",
+    "react-scripts": "5.0.1",
+    "react-transition-group": "^4.4.5",
+    "reactstrap": "^9.1.5",
+    "redux": "^5.0.1",
+    "redux-thunk": "^3.1.0",
+    "uuid": "^9.0.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
