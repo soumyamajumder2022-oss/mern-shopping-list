@@ -39,7 +39,7 @@ mongoose
         console.log('MongoDB Connection Error:', err);
     });
 
-// Use Routes
+// Use Routes - Place this BEFORE static file serving
 app.use('/api/items', items);
 
 // Health check route for Render
@@ -52,7 +52,7 @@ if (process.env.NODE_ENV === 'production') {
     // Set static folder
     app.use(express.static(path.resolve(__dirname, '..', 'client', 'build')));
     
-    // Serve the React app for any route
+    // Serve the React app for any route - This should come AFTER API routes
     app.get('*', (req, res) => {
         res.sendFile(path.resolve(__dirname, '..', 'client', 'build', 'index.html'));
     });

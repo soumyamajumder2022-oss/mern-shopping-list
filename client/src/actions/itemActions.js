@@ -3,14 +3,14 @@ import axios from 'axios';
 
 // Create an axios instance with default config
 const api = axios.create({
-  baseURL: '/api'
+  baseURL: process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000'
 });
 
 export const getItems = () => dispatch => {
     dispatch(setItemsLoading());
     console.log('Fetching items from API...');
     
-    api.get('/items')
+    api.get('/api/items')
         .then(res => {
             console.log('Received items from API:', res.data);
             dispatch({
@@ -31,7 +31,7 @@ export const getItems = () => dispatch => {
 };
 
 export const deleteItem = id => dispatch => {
-    api.delete(`/items/${id}`)
+    api.delete(`/api/items/${id}`)
         .then(res => 
             dispatch({
                 type: DELETE_ITEM,
@@ -44,7 +44,7 @@ export const deleteItem = id => dispatch => {
 };
 
 export const addItem = item => dispatch => {
-    api.post('/items', item)
+    api.post('/api/items', item)
         .then(res => 
             dispatch({
                 type: ADD_ITEM,
