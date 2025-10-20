@@ -11,9 +11,9 @@
     "install-client": "cd client && npm install",
     "install-server": "cd server && npm install",
     "install-all": "npm run install-server && npm run install-client",
-    "build": "npm run install-client && cd client && npm run build",
+    "build": "cd client && npm ci && npm run build",
     "start": "node server/server.js",
-    "render-build": "npm ci && npm run install-all && npm run build",
+    "render-build": "npm ci && cd client && npm ci && cd .. && npm run build",
     "render-start": "node server/server.js"
   },
   "dependencies": {
