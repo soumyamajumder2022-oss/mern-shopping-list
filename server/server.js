@@ -22,15 +22,18 @@ const db = require('./config/keys').mongoURI;
 
 // Connect to MongoDB
 mongoose
-    .connect(db)
+    .connect(db, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
     .then(() => {
-        console.log('MongoDB Connected...');
+        console.log('MongoDB Connected successfully');
         
         // Test the connection by counting items
-        // const Item = require('./models/Item');
-        // Item.countDocuments()
-        //     .then(count => console.log(`Found ${count} items in the database`))
-        //     .catch(err => console.log('Error counting items:', err));
+        const Item = require('./models/Item');
+        Item.countDocuments()
+            .then(count => console.log(`Found ${count} items in the database`))
+            .catch(err => console.log('Error counting items:', err));
     })
     .catch(err => {
         console.log('MongoDB Connection Error:', err);

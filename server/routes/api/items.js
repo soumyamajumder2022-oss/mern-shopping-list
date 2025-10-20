@@ -8,6 +8,7 @@ const Item = require('../../models/Item');
 // @desc    Get All Items
 // @access  Public
 router.get('/', (req, res) => {
+    console.log('GET /api/items called');
     Item.find()
         .sort({ date: -1 })
         .then(items => {
@@ -16,7 +17,7 @@ router.get('/', (req, res) => {
         })
         .catch(err => {
             console.error('Error retrieving items from MongoDB:', err);
-            res.status(500).json({ error: 'Failed to retrieve items' });
+            res.status(500).json({ error: 'Failed to retrieve items', details: err.message });
         });
 });
 
@@ -24,6 +25,7 @@ router.get('/', (req, res) => {
 // @desc    Create A Item
 // @access  Public
 router.post('/', (req, res) => {
+    console.log('POST /api/items called with data:', req.body);
     const newItem = new Item({
         name: req.body.name
     });
@@ -35,7 +37,7 @@ router.post('/', (req, res) => {
         })
         .catch(err => {
             console.error('Error saving item to MongoDB:', err);
-            res.status(500).json({ error: 'Failed to save item' });
+            res.status(500).json({ error: 'Failed to save item', details: err.message });
         });
 });
 
@@ -43,9 +45,11 @@ router.post('/', (req, res) => {
 // @desc    Delete An Item
 // @access  Public
 router.delete('/:id', (req, res) => {
+    console.log('DELETE /api/items/:id called with id:', req.params.id);
     Item.findById(req.params.id)
         .then(item => {
             if (!item) {
+                console.log('Item not found with id:', req.params.id);
                 return res.status(404).json({ success: false, error: 'Item not found' });
             }
             return item.deleteOne().then(() => {
@@ -55,7 +59,7 @@ router.delete('/:id', (req, res) => {
         })
         .catch(err => {
             console.error('Error deleting item from MongoDB:', err);
-            res.status(500).json({ success: false, error: 'Failed to delete item' });
+            res.status(500).json({ success: false, error: 'Failed to delete item', details: err.message });
         });
 });
 

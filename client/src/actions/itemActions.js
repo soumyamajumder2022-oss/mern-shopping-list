@@ -20,6 +20,8 @@ export const getItems = () => dispatch => {
         })
         .catch(err => {
             console.error('Error fetching items:', err.response || err.message || err);
+            // Show error to user
+            alert('Failed to fetch items. Please check the console for details.');
             // Reset loading state even on error
             dispatch({
                 type: GET_ITEMS,
