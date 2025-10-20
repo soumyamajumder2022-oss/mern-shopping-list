@@ -4,7 +4,7 @@ services:
     name: mern-shopping-list-api
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -12,16 +12,4 @@ services:
       - key: MONGO_URI
         sync: false
     healthCheckPath: /health
-    autoDeploy: true
-
-  # Frontend Static Site
-  - type: web
-    name: mern-shopping-list-frontend
-    env: static
-    buildCommand: npm run build
-    staticPublishPath: ./client/build
-    envVars:
-      - key: NODE_ENV
-        value: production
-    pullRequestPreviewsEnabled: true
     autoDeploy: true
