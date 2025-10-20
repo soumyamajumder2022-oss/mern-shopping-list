@@ -2,8 +2,15 @@ import { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING } from './types';
 import axios from 'axios';
 
 // Create an axios instance with default config
+// Use REACT_APP_API_URL environment variable in production, fallback to localhost in development
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? process.env.REACT_APP_API_URL || ''
+  : 'http://localhost:5000';
+
+console.log('API Base URL:', API_BASE_URL);
+
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000'
+  baseURL: API_BASE_URL
 });
 
 export const getItems = () => dispatch => {
