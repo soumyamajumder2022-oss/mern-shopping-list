@@ -2,10 +2,11 @@ import { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING } from './types';
 import axios from 'axios';
 
 // Create an axios instance with default config
-// In production, when frontend and backend are served from the same domain,
-// we don't need a base URL. In development, we use localhost.
+// In production, use the backend service URL; in development, use localhost
 const isProduction = process.env.NODE_ENV === 'production';
-const API_BASE_URL = isProduction ? '' : 'http://localhost:5000';
+const API_BASE_URL = isProduction 
+  ? process.env.REACT_APP_API_URL || 'https://mern-shopping-list-api.onrender.com'  // Default to your backend service
+  : 'http://localhost:5000';
 
 console.log('Environment:', process.env.NODE_ENV);
 console.log('API Base URL:', API_BASE_URL);
@@ -18,7 +19,7 @@ const api = axios.create({
 // Add request interceptor for debugging
 api.interceptors.request.use(
   config => {
-    console.log('API Request:', config.method?.toUpperCase(), config.url);
+    console.log('API Request:', config.method?.toUpperCase(), config.baseURL + config.url);
     return config;
   },
   error => {
@@ -30,7 +31,7 @@ api.interceptors.request.use(
 // Add response interceptor for debugging
 api.interceptors.response.use(
   response => {
-    console.log('API Response:', response.status, response.config.url);
+    console.log('API Response:', response.status, response.config.baseURL + response.config.url);
     return response;
   },
   error => {
