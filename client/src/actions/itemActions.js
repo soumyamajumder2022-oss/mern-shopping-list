@@ -44,13 +44,15 @@ export const getItems = () => dispatch => {
     dispatch(setItemsLoading());
     console.log('Fetching items from API...');
     
-    api.get('/api/items')
+    // Return the Promise so we can handle it in components
+    return api.get('/api/items')
         .then(res => {
             console.log('Received items from API:', res.data);
             dispatch({
                 type: GET_ITEMS,
                 payload: res.data
             });
+            return res.data; // Return data for further handling
         })
         .catch(err => {
             console.error('Error fetching items:', err.response || err.message || err);
@@ -67,6 +69,8 @@ export const getItems = () => dispatch => {
                 type: GET_ITEMS,
                 payload: []
             });
+            // Re-throw the error so it can be caught by calling code
+            throw err;
         });
 };
 

@@ -14,10 +14,13 @@ const ShoppingList = (props) => {
     }
 
     useEffect(() => {
-        props.getItems()
-            .catch(err => {
-                setError('Failed to load items. Please check your network connection and API configuration.');
-            });
+        // Call getItems - it doesn't return a Promise, so we can't use .catch()
+        try {
+            props.getItems();
+        } catch (err) {
+            console.error('Error calling getItems:', err);
+            setError('Failed to load items. Please check your network connection and API configuration.');
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
