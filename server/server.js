@@ -13,7 +13,10 @@ const app = express();
 app.use(bodyParser.json());
 
 // CORS Middleware
-app.use(cors());
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 
 // DB Config
 const db = require('./config/keys').mongoURI;
@@ -60,4 +63,4 @@ if (process.env.NODE_ENV === 'production') {
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+app.listen(port, '0.0.0.0', () => console.log(`Server started on port ${port}`));
