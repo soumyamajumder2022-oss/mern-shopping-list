@@ -4,6 +4,12 @@ const router = express.Router();
 // Item Model
 const Item = require('../../models/Item');
 
+// Add logging for all requests to this router
+router.use((req, res, next) => {
+    console.log(`API Items Route: ${req.method} ${req.url}`);
+    next();
+});
+
 // @route   GET api/items
 // @desc    Get All Items
 // @access  Public

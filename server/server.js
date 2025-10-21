@@ -42,7 +42,7 @@ mongoose
         console.log('MongoDB Connection Error:', err);
     });
 
-// Use Routes - Place this BEFORE static file serving
+// IMPORTANT: API routes must be defined BEFORE static file serving
 app.use('/api/items', items);
 
 // Health check route for Render
@@ -64,18 +64,27 @@ app.get('/test', (req, res) => {
     });
 });
 
+// Add a root route for testing
+app.get('/', (req, res) => {
+    res.status(200).json({ 
+        message: 'Server is running',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
     // Set static folder
     app.use(express.static(path.resolve(__dirname, '..', 'client', 'build')));
     
     // Add logging for static file serving
+    // IMPORTANT: This must come AFTER API routes but BEFORE the catch-all route
     app.use((req, res, next) => {
         console.log(`Static file request: ${req.method} ${req.url}`);
         next();
     });
     
-    // Serve the React app for any route - This should come AFTER API routes
+    // Serve the React app for any route - This should be the LAST route
     app.get('*', (req, res) => {
         console.log(`Sending index.html for route: ${req.url}`);
         res.sendFile(path.resolve(__dirname, '..', 'client', 'build', 'index.html'));
