@@ -47,7 +47,21 @@ app.use('/api/items', items);
 
 // Health check route for Render
 app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'OK', message: 'Server is running', timestamp: new Date().toISOString() });
+    res.status(200).json({ 
+        status: 'OK', 
+        message: 'Server is running', 
+        timestamp: new Date().toISOString(),
+        nodeVersion: process.version,
+        platform: process.platform
+    });
+});
+
+// Add a simple test route
+app.get('/test', (req, res) => {
+    res.status(200).json({ 
+        message: 'Test route is working',
+        timestamp: new Date().toISOString()
+    });
 });
 
 // Serve static assets if in production
@@ -55,8 +69,15 @@ if (process.env.NODE_ENV === 'production') {
     // Set static folder
     app.use(express.static(path.resolve(__dirname, '..', 'client', 'build')));
     
+    // Add logging for static file serving
+    app.use((req, res, next) => {
+        console.log(`Static file request: ${req.method} ${req.url}`);
+        next();
+    });
+    
     // Serve the React app for any route - This should come AFTER API routes
     app.get('*', (req, res) => {
+        console.log(`Sending index.html for route: ${req.url}`);
         res.sendFile(path.resolve(__dirname, '..', 'client', 'build', 'index.html'));
     });
 }

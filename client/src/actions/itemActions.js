@@ -2,16 +2,42 @@ import { GET_ITEMS, ADD_ITEM, DELETE_ITEM, ITEMS_LOADING } from './types';
 import axios from 'axios';
 
 // Create an axios instance with default config
-// Use REACT_APP_API_URL environment variable in production, fallback to localhost in development
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.REACT_APP_API_URL || ''
-  : 'http://localhost:5000';
+// In production, when frontend and backend are served from the same domain,
+// we don't need a base URL. In development, we use localhost.
+const isProduction = process.env.NODE_ENV === 'production';
+const API_BASE_URL = isProduction ? '' : 'http://localhost:5000';
 
+console.log('Environment:', process.env.NODE_ENV);
 console.log('API Base URL:', API_BASE_URL);
 
 const api = axios.create({
-  baseURL: API_BASE_URL
+  baseURL: API_BASE_URL,
+  timeout: 10000, // 10 second timeout
 });
+
+// Add request interceptor for debugging
+api.interceptors.request.use(
+  config => {
+    console.log('API Request:', config.method?.toUpperCase(), config.url);
+    return config;
+  },
+  error => {
+    console.error('API Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor for debugging
+api.interceptors.response.use(
+  response => {
+    console.log('API Response:', response.status, response.config.url);
+    return response;
+  },
+  error => {
+    console.error('API Response Error:', error.response || error.message || error);
+    return Promise.reject(error);
+  }
+);
 
 export const getItems = () => dispatch => {
     dispatch(setItemsLoading());
